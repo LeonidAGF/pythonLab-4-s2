@@ -1,5 +1,5 @@
-
-from typing import Dict, Iterator
+import asyncio
+from typing import Dict, Any, AsyncGenerator
 from src.task import Task
 from src.generator import rand_int_array, nearly_sorted, many_duplicates, reverse_sorted, rand_float_array
 
@@ -17,7 +17,7 @@ class SourceFromGenerator:
             raise Exception
         self.type = type
 
-    def get_tasks(self) -> Iterator[Task | None]:
+    async def get_tasks(self) -> AsyncGenerator[Task, Any]:
         """
             Функция получения задач из генераторов
         """
@@ -36,6 +36,7 @@ class SourceFromGenerator:
                     data["numbers"] = reverse_sorted(10)
                 case 5:
                     data["numbers"] = rand_float_array(20)
+            await asyncio.sleep(0.5)
 
             el: Task = Task(col+45612, 'description', data, (col%2)+1)
             yield el

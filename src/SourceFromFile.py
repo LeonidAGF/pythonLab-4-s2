@@ -1,6 +1,7 @@
-from typing import Dict, Iterator
+import asyncio
+from typing import Dict, Any, AsyncGenerator
 from src.task import Task
-from src.cat_function import cat
+import aiofiles
 
 
 class SourceFromFile:
@@ -14,14 +15,17 @@ class SourceFromFile:
         """
         self.path = path
 
-    def get_tasks(self) -> Iterator[Task | None]:
+    async def get_tasks(self) -> AsyncGenerator[Task | None, Any]:
         """
             функция получения задач
         """
         try:
             data: Dict[str, str] = {}
-            data["text"] = cat(self.path)
+            async with aiofiles.open(self.path, 'r') as f:
+                data["text"] = await f.read()
             task: Task = Task(489652,'description', data,1)
+            await asyncio.sleep(0.5)
             yield task
         except Exception:
+            await asyncio.sleep(0.5)
             yield None

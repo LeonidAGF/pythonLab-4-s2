@@ -15,7 +15,7 @@ class SourceFromWeb:
         """
         self.client = client
 
-    def get_tasks(self) -> Iterator[Task | None]:
+    async def get_tasks(self) -> Iterator[Task | None]:
         """
             Функция получения задач из интернета
         """
@@ -23,7 +23,7 @@ class SourceFromWeb:
         try:
             if isinstance(self.client, ClientBase):
                 for col in range(0, 2):
-                    el: Task = self.client.get_task()
+                    el: Task = await self.client.get_task()
                     yield el
             else:
                 raise TypeError

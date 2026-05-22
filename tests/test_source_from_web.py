@@ -1,20 +1,25 @@
+import pytest
 from src.client import ClientGet as Client
 from src.SourceFromWeb import SourceFromWeb
 
-
-def test_source_from_web():
+@pytest.mark.asyncio
+async def test_source_from_web():
     """
-        Тесты для SourceFromWeb
+    Тесты для SourceFromWeb.
     """
 
-    client1 = Client("https://ru.wikipedia.org/wiki/Python")
-    client2 = Client("fcghvjbknjlm;")
+    client_ok = Client("https://ru.wikipedia.org/wiki/Python")
+    client_bad = Client("fcghvjbknjlm;")
 
-    sff1:SourceFromWeb = SourceFromWeb(client1)
-    sff2:SourceFromWeb = SourceFromWeb(client1)
-    sff3:SourceFromWeb = SourceFromWeb(client2)
+    source_ok1 = SourceFromWeb(client_ok)
+    source_ok2 = SourceFromWeb(client_ok)
+    source_bad = SourceFromWeb(client_bad)
 
-    assert len(list(sff1.get_tasks()))!=0
-    assert len(list(sff2.get_tasks()))!=0
-    assert list(sff1.get_tasks())[0].id==list(sff2.get_tasks())[0].id
-    assert None in sff3.get_tasks()
+    tasks1 = [task async for task in source_ok1.get_tasks()]
+    tasks2 = [task async for task in source_ok2.get_tasks()]
+    assert len(tasks1) > 0
+    assert tasks1[0] is not None
+    assert tasks1[0].payload == tasks2[0].payload
+    bad_tasks = [task async for task in source_bad.get_tasks()]
+    assert len(bad_tasks) == 2
+    assert bad_tasks[0] is None

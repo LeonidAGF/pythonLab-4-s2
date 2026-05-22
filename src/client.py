@@ -1,8 +1,7 @@
 import json
 from typing import Dict, Any, Protocol, runtime_checkable
-from requests import Response
 from src.task import Task
-import requests
+import httpx
 
 @runtime_checkable
 class ClientBase(Protocol):
@@ -10,7 +9,7 @@ class ClientBase(Protocol):
         шаблон клиента
     """
 
-    def get_task(self) -> Task | None:
+    async def get_task(self) -> Task | None:
         """
             функция необходимая для получения задач
         """
@@ -28,17 +27,18 @@ class ClientGet:
         """
         self.path = path
 
-    def get_task(self) -> Task | None:
+    async def get_task(self) -> Task | None:
         """
             Функция получения задач из интернета
         """
         try:
             data: Dict[str, Any] = {}
-            response: Response = requests.get(self.path)
-            try:
-                data["data"] = response.json().get('metadata').get('timezone_abbrevation')
-            except Exception:
-                data["data"] = response.text
+            async with httpx.AsyncClient() as client:
+                response = await client.get(self.path)
+                try:
+                    data["data"] = response.json().get('metadata').get('timezone_abbrevation')
+                except Exception:
+                    data["data"] = response.text
             task: Task = Task(len(str(data["data"])),'description',data, (len(str(data["data"]))%2)+1)
             return task
         except Exception:
@@ -57,17 +57,18 @@ class ClientPost:
         self.path = path
         self.message = message
 
-    def get_task(self) -> Task | None:
+    async def get_task(self) -> Task | None:
         """
             Функция получения задач из интернета
         """
         try:
             data: Dict[str, Any] = {}
-            response = requests.post(self.path, data=json.dumps(self.message))
-            try:
-                data["data"] = response.json().get('metadata').get('timezone_abbrevation')
-            except Exception:
-                data["data"] = response.text
+            async with httpx.AsyncClient() as client:
+                response = await client.post(self.path, data=json.dumps(self.message))
+                try:
+                    data["data"] = response.json().get('metadata').get('timezone_abbrevation')
+                except Exception:
+                    data["data"] = response.text
             task: Task = Task( (len(str(data["data"]))),'description',data, ((len(str(data["data"]))%2)+1))
             return task
         except Exception:

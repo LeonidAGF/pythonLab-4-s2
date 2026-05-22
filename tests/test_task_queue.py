@@ -1,30 +1,28 @@
-from src.client import ClientGet as Client
-from src.SourceFromWeb import SourceFromWeb
+import pytest
 from src.task import Task
-from src.task_queue import TaskQueue
+from src.task_queue import AsyncTaskQueue
+import asyncio
 
-
-def filter_by_status(task: Task):
-    if task.status == 'ready':
-        return True
-    return False
-
-
-def test_task_queue():
+@pytest.mark.asyncio
+async def test_queue() -> None:
     """
-        Тесты для task_queue
+       тесты на  AsyncTaskQueue
     """
+    queue = AsyncTaskQueue()
+    task = Task(45612, 'description', {"to": "a@b.com"}, (1%2)+1)
 
-    cclient1 = Client("https://my.meteoblue.com/packages/basic-1h_basic-day?apikey=bOico7hWTVAzPQYM&lat=55.752&lon=37.6178&asl=155&format=json")
+    await queue.put(task)
+    result = await queue.get()
 
-    source_from_web1 = SourceFromWeb(cclient1)
+    assert result is task
+    assert result.payload == {"to": "a@b.com"}
 
-    tq = TaskQueue(source_from_web1)
+    task1 = Task(45612, 'description', {"delayed": "delayed"}, (1%2)+1)
 
-    assert list(tq)[0].id==list(tq)[0].id
-    assert len(list(tq.filtration(filter_by_status)))==0
+    async def delayed_put():
+        await asyncio.sleep(0.1)
+        await queue.put(task1)
 
-    sum_of_priority: int = sum(el.priority for el in tq)
-    sum_of_priority1: int = sum(el.priority for el in tq)
-
-    assert sum_of_priority==sum_of_priority1
+    asyncio.create_task(delayed_put())
+    result = await queue.get()
+    assert result is task1

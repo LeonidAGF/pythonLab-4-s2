@@ -6,7 +6,7 @@ class TaskSource(Protocol):
     """
         Шаблон источника задачи
     """
-    def get_tasks(self) -> list[Task] | None:
+    async def get_tasks(self) -> list[Task] | None:
         """
             функция необходимая для получения задач
         """

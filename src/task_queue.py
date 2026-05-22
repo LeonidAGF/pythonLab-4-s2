@@ -1,37 +1,24 @@
-from typing import Callable, Generator, Iterator
+from asyncio import Queue
 
-from src.Source import TaskSource
 from src.task import Task
-from task import Task
 
 
-class TaskQueue:
+class AsyncTaskQueue:
     """
-        очередь задач
+        Асинхронная очередь задач
     """
 
-    def __init__(self, source: TaskSource) -> None:
-        """
-            ункция для инициализации атрибутов
-        """
-        self.source: TaskSource = source
+    def __init__(self) -> None:
+        self._queue: Queue[Task] = Queue()
 
-    def __iter__(self) -> Iterator[Task]:
+    async def put(self, task: Task) -> None:
         """
-            функция для итерации по задачам из источника
+            Добавить задачу в очередь
         """
-        itr = iter(self.source.get_tasks())
-        while True:
-            try:
-                item = next(itr)
-                yield item
-            except StopIteration:
-                break
+        await self._queue.put(task)
 
-    def filtration(self, func: Callable[[Task], bool]) -> Generator[Task]:
+    async def get(self) -> Task:
         """
-            функция реализующая ленивый фильтр
+            получить задачу из очереди
         """
-        for task in self:
-            if func(task):
-                yield task
+        return await self._queue.get()
