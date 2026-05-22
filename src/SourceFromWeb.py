@@ -6,18 +6,18 @@ from src.task import Task
 
 class SourceFromWeb:
     """
-        Источник задач из интернета
+    Источник задач из интернета
     """
 
     def __init__(self, client: ClientBase) -> None:
         """
-            Инициализатор источника задач из интернета
+        Инициализатор источника задач из интернета
         """
         self.client = client
 
     async def get_tasks(self) -> Iterator[Task | None]:
         """
-            Функция получения задач из интернета
+        Функция получения задач из интернета
         """
 
         try:

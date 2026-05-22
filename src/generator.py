@@ -1,5 +1,6 @@
 import random
 
+
 def rand_int_array(n: int, lo: int, hi: int, *, distinct=False, seed=None) -> list[int]:
     """
     Функция генерирующая массив случайных чисел
@@ -33,7 +34,10 @@ def nearly_sorted(n: int, swaps: int, *, seed=None) -> list[int]:
         while first_pos_for_swap == second_pos_for_swap:
             first_pos_for_swap = random.randint(0, n - 1)
             second_pos_for_swap = random.randint(0, n - 1)
-        array[first_pos_for_swap], array[second_pos_for_swap] = array[second_pos_for_swap], array[first_pos_for_swap]
+        array[first_pos_for_swap], array[second_pos_for_swap] = (
+            array[second_pos_for_swap],
+            array[first_pos_for_swap],
+        )
     return array
 
 
@@ -61,7 +65,10 @@ def many_duplicates(n: int, k_unique=5, *, seed=None) -> list[int]:
         while first_pos_for_swap == second_pos_for_swap:
             first_pos_for_swap = random.randint(0, n - 1)
             second_pos_for_swap = random.randint(0, n - 1)
-        array[first_pos_for_swap], array[second_pos_for_swap] = array[second_pos_for_swap], array[first_pos_for_swap]
+        array[first_pos_for_swap], array[second_pos_for_swap] = (
+            array[second_pos_for_swap],
+            array[first_pos_for_swap],
+        )
 
     return array
 

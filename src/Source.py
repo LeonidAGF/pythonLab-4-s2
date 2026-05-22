@@ -1,13 +1,15 @@
 from typing import Protocol, runtime_checkable
 from src.task import Task
 
+
 @runtime_checkable
 class TaskSource(Protocol):
     """
-        Шаблон источника задачи
+    Шаблон источника задачи
     """
+
     async def get_tasks(self) -> list[Task] | None:
         """
-            функция необходимая для получения задач
+        функция необходимая для получения задач
         """
         pass

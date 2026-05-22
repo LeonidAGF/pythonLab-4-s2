@@ -1,8 +1,15 @@
-from src.generator import rand_int_array, nearly_sorted, many_duplicates, reverse_sorted, rand_float_array
+from src.generator import (
+    rand_int_array,
+    nearly_sorted,
+    many_duplicates,
+    reverse_sorted,
+    rand_float_array,
+)
+
 
 def test_case_generators():
     """
-        Тесты для reverse_sorted,many_duplicates,nearly_sorted,rand_int_array,rand_float_array
+    Тесты для reverse_sorted,many_duplicates,nearly_sorted,rand_int_array,rand_float_array
     """
 
     test_arr1: list[int] = rand_int_array(5, 0, 10, distinct=True)

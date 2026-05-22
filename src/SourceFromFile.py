@@ -6,24 +6,24 @@ import aiofiles
 
 class SourceFromFile:
     """
-        Источник задач из файла
+    Источник задач из файла
     """
 
     def __init__(self, path: str) -> None:
         """
-            Инициализатор для источника задач из файла
+        Инициализатор для источника задач из файла
         """
         self.path = path
 
     async def get_tasks(self) -> AsyncGenerator[Task | None, Any]:
         """
-            функция получения задач
+        функция получения задач
         """
         try:
             data: Dict[str, str] = {}
-            async with aiofiles.open(self.path, 'r') as f:
+            async with aiofiles.open(self.path, "r") as f:
                 data["text"] = await f.read()
-            task: Task = Task(489652,'description', data,1)
+            task: Task = Task(489652, "description", data, 1)
             await asyncio.sleep(0.5)
             yield task
         except Exception:

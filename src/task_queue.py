@@ -5,7 +5,7 @@ from src.task import Task
 
 class AsyncTaskQueue:
     """
-        Асинхронная очередь задач
+    Асинхронная очередь задач
     """
 
     def __init__(self) -> None:
@@ -13,12 +13,12 @@ class AsyncTaskQueue:
 
     async def put(self, task: Task) -> None:
         """
-            Добавить задачу в очередь
+        Добавить задачу в очередь
         """
         await self._queue.put(task)
 
     async def get(self) -> Task:
         """
-            получить задачу из очереди
+        получить задачу из очереди
         """
         return await self._queue.get()
