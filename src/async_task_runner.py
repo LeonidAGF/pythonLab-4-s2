@@ -2,7 +2,6 @@ from src.task import Task
 from src.task_queue import AsyncTaskQueue
 from src.task_async_manager import TaskAsyncManager
 
-
 class AsyncTaskRunner:
     """
     шаблон async runnerа задач
