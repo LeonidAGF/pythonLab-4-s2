@@ -15,6 +15,7 @@ class AsyncTaskQueue:
         """
         Добавить задачу в очередь
         """
+        task.status = "in processing"
         await self._queue.put(task)
 
     async def get(self) -> Task:

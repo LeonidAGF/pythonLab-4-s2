@@ -32,14 +32,16 @@ async def main() -> None:
         await tq.put(el)
 
     runnner: AsyncTaskRunner = AsyncTaskRunner(tq, TaskStringManager())
-    await runnner.run(2)
+    task1 = asyncio.create_task(runnner.run(2))
+
 
     tq2 = AsyncTaskQueue()
     async for el in source_from_web3.get_tasks():
         await tq2.put(el)
 
     runnner2: AsyncTaskRunner = AsyncTaskRunner(tq2, TaskStringManager())
-    await runnner2.run(2)
+    task2 = asyncio.create_task(runnner2.run(2))
+
 
     print("\n", "Tasks from file:")
 
@@ -52,9 +54,10 @@ async def main() -> None:
 
     print("\n", "Tasks from generators:")
 
+    await task1
+    await task2
     for el in await task_manager(source_from_generators):
         print(el)
-
 
 if __name__ == "__main__":
     asyncio.run(main())
