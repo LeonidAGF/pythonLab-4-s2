@@ -11,7 +11,6 @@ from task_queue import AsyncTaskQueue
 
 
 async def main() -> None:
-
     client1 = Client(
         "https://my.meteoblue.com/packages/basic-1h_basic-day?apikey=bOico7hWTVAzPQYM&lat=55.752&lon=37.6178&asl=155&format=json"
     )
@@ -34,13 +33,11 @@ async def main() -> None:
     runnner: AsyncTaskRunner = AsyncTaskRunner(tq, TaskStringManager())
     task1 = asyncio.create_task(runnner.run(2))
 
-
     async for el in source_from_web3.get_tasks():
         await tq.put(el)
 
     runnner2: AsyncTaskRunner = AsyncTaskRunner(tq, TaskStringManager())
     task2 = asyncio.create_task(runnner2.run(2))
-
 
     print("\n", "Tasks from file:")
 
@@ -56,6 +53,7 @@ async def main() -> None:
     await task2
     for el in await task_manager(source_from_generators):
         print(el)
+
 
 if __name__ == "__main__":
     asyncio.run(main())

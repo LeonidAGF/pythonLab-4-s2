@@ -10,7 +10,10 @@ class AsyncTaskRunner:
     def __init__(self, queue: AsyncTaskQueue, manager: TaskAsyncManager) -> None:
 
         self.queue = queue
-        self.manager = manager
+        if isinstance(manager, TaskAsyncManager):
+            self.manager = manager
+        else:
+            raise TypeError
 
     async def run(self, col: int) -> None:
         """
